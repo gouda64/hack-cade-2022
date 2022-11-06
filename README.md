@@ -11,3 +11,8 @@ This project remastered the popular arcade game Tetris and added voice commands 
 - Gatsby (https://www.gatsbyjs.com): Version 5
 - ml5 (https://ml5js.org): Version 0.12.2
 - Bulma (https://bulma.io): Version 0.9.4
+- MongoDB Atlas (https://www.mongodb.com/cloud/atlas)
+
+## Running this project
+
+Detailed steps can be found in this repo: (https://github.com/gatsbyjs/gatsby).
