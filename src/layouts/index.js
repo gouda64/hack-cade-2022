@@ -14,22 +14,22 @@ export default function IndexLayout({ children }) {
       <meta name="image" content="https://divakar.fitness/i.png" />
       <header className="navbar bg-light display-6 px-5 py-1 has-background-danger">
         <div className="container-fluid">
-          <p>
+          <Link to="/">
             <strong className="is-size-4 pr-1 pt-1">Tetris</strong>{" "}
             <code className="is-size-6">REMASTERED</code>
-          </p>
+          </Link>
         </div>
-        <div>
-          <Link to="/login">Login</Link>
+        <div className="navbar-menu">
+          <div className="navbar-end">
+            <Link className="navbar-item button is-warning" to="/login">
+              Login
+            </Link>
+          </div>
         </div>
       </header>
       {children}
-      <footer className="level">
-        <div className="level-item has-text-centered">
-          <div>
-            <p>AI</p>
-          </div>
-        </div>
+      <footer className="p-3 container-fluid has-text-centered">
+        <p>© {new Date().getFullYear()}. All rights not reserved. 😎</p>
       </footer>
     </>
   );

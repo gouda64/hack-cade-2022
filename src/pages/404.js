@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 
 const pageStyles = {
   color: "#232129",
@@ -15,42 +15,36 @@ const headingStyles = {
 const paragraphStyles = {
   marginBottom: 48,
 };
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-};
 
-export default function NotFoundPage() {
-  return (
-    <main style={pageStyles}>
-      <h1 style={headingStyles}>Page not found</h1>
-      <p style={paragraphStyles}>
-        Sorry 😔, we couldn’t find what you were looking for.
-        <br />
-        {process.env.NODE_ENV === "development" ? (
-          <>
-            <br />
-            Try creating a page in <code style={codeStyles}>src/pages/</code>.
-            <br />
-          </>
-        ) : null}
-        <br />
-        <Link to="/">Go home</Link>.
-      </p>
-    </main>
-  );
+export default class NotFoundPage extends React.Component {
+  componentDidMount() {
+    navigate("/");
+  }
+  render() {
+    return (
+      <main style={pageStyles}>
+        <h1 style={headingStyles}>Page not found</h1>
+        <p style={paragraphStyles}>
+          Sorry 😔, we couldn’t find what you were looking for.
+          <br />
+          <br />
+          <Link to="/">Go home</Link>.
+        </p>
+      </main>
+    );
+  }
 }
-
 export function Head() {
   return (
     <>
-      <title>Page Not Found | Edit Your page's title here!</title>
+      <title>Page Not Found | Tetris REMASTERED</title>
       <meta
         name="description"
         content="This page doesn't exist. Please visit our homepage."
+      />
+      <meta
+        name="keywords"
+        content="tetris, retro, video-game, gaming, yessir, disney, nintendo, artificial-intelligence, voice-recognition"
       />
     </>
   );

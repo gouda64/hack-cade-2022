@@ -1,4 +1,5 @@
 import * as React from "react";
+import { navigate } from "gatsby";
 import Phaser from "phaser";
 import { IonPhaser } from "@ion-phaser/react";
 import { preload, create, update } from "../services/game";
@@ -18,7 +19,9 @@ export default class PlayPage extends React.Component {
         scene: {
           init: preload,
           create: create,
-          update: update,
+          update: () => {
+            if (update()) navigate("/loser");
+          },
         },
       },
       gameOver: false,
@@ -39,8 +42,15 @@ export default class PlayPage extends React.Component {
 export function Head() {
   return (
     <>
-      <title>Edit Your Page's Title! | It's easy.</title>;
-      <meta name="description" content="Edit your page's description here!" />
+      <title>Tetris REMASTERED | Cool stuff in motion.</title>;
+      <meta
+        name="description"
+        content="Play the best Tetris ever!!! AI-powered voice-control gameplay for EXTRA AWESOMENESS!!!!!!!"
+      />
+      <meta
+        name="keywords"
+        content="tetris retro video-game gaming yessir disney nintendo artificial-intelligence voice-recognition"
+      />
     </>
   );
 }

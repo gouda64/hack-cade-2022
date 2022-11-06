@@ -10,7 +10,7 @@ export default function IndexPage() {
           <br />
           to play?
         </h1>
-        <Link to="play" className="button is-tertiary is-large m-5">
+        <Link to="/play" className="button is-primary is-large m-5">
           Yessir!
         </Link>
       </div>
@@ -21,8 +21,15 @@ export default function IndexPage() {
 export function Head() {
   return (
     <>
-      <title>Edit Your Page's Title! | It's easy.</title>;
-      <meta name="description" content="Edit your page's description here!" />
+      <title>Tetris REMASTERED | Play if you dare...</title>;
+      <meta
+        name="description"
+        content="BEST Tetris remake for Hack-cade 2022!! AI-powered voice-control gameplay for EXTRA AWESOMENESS!!!!!!!"
+      />
+      <meta
+        name="keywords"
+        content="tetris, retro, video-game, gaming, yessir, disney, nintendo, artificial-intelligence, voice-recognition"
+      />
     </>
   );
 }

@@ -2,8 +2,8 @@
 
 module.exports = {
   siteMetadata: {
-    title: "Website Title Here", // Your Website's Title
-    siteUrl: "https://www.yourdomain.tld", // Your Website's Url
+    title: "Tetris Remastered", // Your Website's Title
+    siteUrl: "https://hackcade2022main.gtsb.io", // Your Website's Url
   },
   plugins: [
     {
@@ -50,16 +50,20 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        name: "Website Name Here", // Your website's name
-        short_name: "Short Website Name Here", // Shortened version of your website's name
-        description: "Basic description of your website.", // Description of your website
+        name: "Tetris Remastered", // Your website's name
+        short_name: "Tetris R", // Shortened version of your website's name
+        description:
+          "BEST Tetris remake for Hack-cade 2022!! AI-powered voice-control gameplay for EXTRA AWESOMENESS!!!!!!!", // Description of your website
         lang: "en", // Language used
         start_url: "/", // Home page url (everything after the tld)
-        background_color: "#ffffff", // Above search bar (in phone browser)
+        background_color: "#000000", // Above search bar (in phone browser)
         theme_color: "#000000", // Search bar (in phone browser)
         display: "standalone",
-        icon: "src/images/icon.png", // Path to your icon
+        icon: "./src/images/i.png", // Path to your icon
         cache_busting_mode: "none",
+        icon_options: {
+          purpose: "any maskable",
+        },
       },
     },
     "gatsby-plugin-nprogress",

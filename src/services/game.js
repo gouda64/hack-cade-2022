@@ -11,6 +11,8 @@ var scoreText;
 var levelText;
 var speechButton;
 var paused = false;
+var pauseButton;
+var restartButton;
 var stepCount = 0;
 var stepMod = 25;
 var pressMod = 10;
@@ -27,6 +29,7 @@ var rectGrid = [];
 var classifier;
 
 export function preload() {
+  restart();
   classifier = ml5.soundClassifier("SpeechCommands18w", {}, () =>
     console.info("Model ready.")
   );
@@ -36,7 +39,7 @@ export function create() {
   for (let i = 0; i < 20; i++) {
     let rectRow = [];
     for (let j = 0; j < 10; j++) {
-      var rect = this.add.rectangle(
+      let rect = this.add.rectangle(
         SCREEN_WIDTH / 2 - CELL_SIZE * 5 + j * CELL_SIZE,
         SCREEN_HEIGHT / 2 - CELL_SIZE * 10 + i * CELL_SIZE,
         CELL_SIZE,
@@ -52,12 +55,12 @@ export function create() {
   //  Input Events
   cursors = this.input.keyboard.createCursorKeys();
 
-  scoreText = this.add.text(SCREEN_WIDTH / 2 - CELL_SIZE * 5, 0, "score: 0", {
+  scoreText = this.add.text(SCREEN_WIDTH / 2 - CELL_SIZE * 5, 0, "Score: 0", {
     fontSize: "32px",
     fill: "#FFF",
   });
 
-  levelText = this.add.text(SCREEN_WIDTH / 2 - CELL_SIZE * 5, 40, "level: 0", {
+  levelText = this.add.text(SCREEN_WIDTH / 2 - CELL_SIZE * 5, 40, "Level: 0", {
     fontSize: "32px",
     fill: "#FFF",
   });
@@ -80,10 +83,47 @@ export function create() {
       if (audioOn) speechButton.setText("Turn Off Audio\nControls");
       else speechButton.setText("Turn On Audio\nControls");
     });
+
+  pauseButton = this.add
+    .text(
+      SCREEN_WIDTH / 2 + CELL_SIZE * 5 + 10,
+      SCREEN_HEIGHT / 2 + CELL_SIZE * 3,
+      "Pause",
+      {
+        fontSize: "20px",
+        stroke: "#FFF",
+        fill: "#FFF",
+        padding: 10,
+      }
+    )
+    .setInteractive({ useHandCursor: true })
+    .on("pointerdown", () => {
+      paused = !paused;
+      if (paused) pauseButton.setText("Resume");
+      else pauseButton.setText("Pause");
+    });
+
+  restartButton = this.add
+    .text(
+      SCREEN_WIDTH / 2 + CELL_SIZE * 5 + 10,
+      SCREEN_HEIGHT / 2 + CELL_SIZE * 5,
+      "Restart",
+      {
+        fontSize: "20px",
+        stroke: "#FFF",
+        fill: "#FFF",
+        padding: 10,
+      }
+    )
+    .setInteractive({ useHandCursor: true })
+    .on("pointerdown", () => {
+      restart();
+    });
 }
 
 export function update() {
-  if (currBlock.checkLose()) restart();
+  if (paused) return;
+  if (currBlock.checkLose()) return true; //return true;
 
   hasLanded = currBlock.landed();
 
@@ -93,59 +133,55 @@ export function update() {
   }
 
   // left/right/up movements
-  if (cursors.left.isDown && stepCount % pressMod == 0) currBlock.moveLeft();
-  if (cursors.right.isDown && stepCount % pressMod == 0) currBlock.moveRight();
-  if (cursors.down.isDown && stepCount % pressMod == 0) currBlock.moveDown();
+  if (cursors.left.isDown && stepCount % pressMod === 0) currBlock.moveLeft();
+  if (cursors.right.isDown && stepCount % pressMod === 0) currBlock.moveRight();
+  if (cursors.down.isDown && stepCount % pressMod === 0) currBlock.moveDown();
 
   //hard drop
-  if (cursors.space.isDown && stepCount % ((4 * pressMod) / 5) == 0)
+  if (cursors.space.isDown && stepCount % ((4 * pressMod) / 5) === 0)
     currBlock.hardDrop();
 
   // rotate
-  if (cursors.up.isDown && stepCount % ((3 * pressMod) / 5) == 0)
+  if (cursors.up.isDown && stepCount % ((3 * pressMod) / 5) === 0)
     currBlock.rotate(true);
-  //if (cursors.z.isDown && stepCount % ((3 * pressMod) / 5) == 0)
+  //if (cursors.z.isDown && stepCount % ((3 * pressMod) / 5) === 0)
   //currBlock.rotate(false);
 
-  if (audioOn) {
-    let sound = "";
-    if (stepCount % stepMod == 0) {
-      classifier.classify(function (error, result) {
-        if (error) {
-          console.error();
-          return;
-        }
-        sound = result[0].label;
-        console.log(sound);
-        switch (sound) {
-          case "left":
-            currBlock.moveLeft();
-            break;
-          case "right":
-            currBlock.moveRight();
-            break;
-          case "go":
-            currBlock.moveDown(); //hard drop
-            break;
-          case "down":
-            currBlock.hardDrop();
-            break;
-          case "up":
-            currBlock.rotate(true);
-            break;
-          default:
-            break;
-        }
-      });
-    }
+  if (stepCount % stepMod === 0) {
+    classifier.classify(function (error, result) {
+      if (error) {
+        console.error();
+        return;
+      }
+      let sound = result[0].label;
+      switch (audioOn && !paused ? sound : "") {
+        case "left":
+          currBlock.moveLeft();
+          break;
+        case "right":
+          currBlock.moveRight();
+          break;
+        case "go":
+          currBlock.moveDown(); //hard drop
+          break;
+        case "down":
+          currBlock.hardDrop();
+          break;
+        case "up":
+          currBlock.rotate(true);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   checkRows();
 
   repaint();
 
-  scoreText.setText("score: " + score);
-  levelText.setText("level: " + level);
+  scoreText.setText("Score: " + score);
+  levelText.setText("Level: " + level);
   stepCount++;
 }
 
@@ -242,7 +278,7 @@ function repaint() {
     }
   }
   for (let i = 0; i < 4; i++) {
-    var rect = rectGrid[currBlock.blockY[i]][currBlock.blockX[i]];
+    let rect = rectGrid[currBlock.blockY[i]][currBlock.blockX[i]];
     rect.setAlpha([0.8]);
     switch (currBlock.id) {
       case -1:
