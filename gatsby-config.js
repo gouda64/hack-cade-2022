@@ -5,6 +5,9 @@ module.exports = {
     title: "Tetris Remastered", // Your Website's Title
     siteUrl: "https://hackcade2022main.gtsb.io", // Your Website's Url
   },
+  flags: {
+    DEV_SSR: true,
+  },
   plugins: [
     {
       resolve: "gatsby-plugin-csp",

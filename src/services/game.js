@@ -123,7 +123,10 @@ export function create() {
 
 export function update() {
   if (paused) return;
-  if (currBlock.checkLose()) return true; //return true;
+  if (currBlock.checkLose()) {
+    window.sessionStorage.setItem("score", score);
+    return true; //return true;
+  }
 
   hasLanded = currBlock.landed();
 

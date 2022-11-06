@@ -21,9 +21,7 @@ export default function IndexLayout({ children }) {
         </div>
         <div className="navbar-menu">
           <div className="navbar-end">
-            <Link className="navbar-item button is-warning" to="/login">
-              Login
-            </Link>
+            <button className="navbar-item button is-warning">No Login</button>
           </div>
         </div>
       </header>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { navigate } from "gatsby";
 import Phaser from "phaser";
-import { IonPhaser } from "@ion-phaser/react";
+import loadable from "@loadable/component";
 import { preload, create, update } from "../services/game";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../services/constants";
 
@@ -20,7 +20,7 @@ export default class PlayPage extends React.Component {
           init: preload,
           create: create,
           update: () => {
-            if (update()) navigate("/loser");
+            if (update() && typeof window !== "undefined") navigate("/loser");
           },
         },
       },
@@ -30,7 +30,9 @@ export default class PlayPage extends React.Component {
 
   render() {
     const { initialize, game } = this.state;
-
+    const IonPhaser = loadable(() =>
+      import("../../node_modules/@ion-phaser/react")
+    );
     return (
       <div className="pt-5">
         {typeof window !== "undefined" && (

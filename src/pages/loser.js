@@ -40,7 +40,6 @@ export default class LoserPage extends React.Component {
     super(props);
     this.state = {
       name: "",
-      score: null,
       phone: "",
       scorers: [],
     };
@@ -68,7 +67,7 @@ export default class LoserPage extends React.Component {
       axios
         .post("/api/add-score", {
           name: state.name,
-          score: state.score,
+          score: parseInt(window.sessionStorage.getItem("score")),
           phone: state.phone,
         })
         .then(function (response) {
