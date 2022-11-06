@@ -44,6 +44,18 @@ export default class LoserPage extends React.Component {
       phone: "",
     };
   }
+  addScorer(state, e) {
+    e.preventDefault();
+    if (state.name !== "" && state.phone !== "" && state.score !== -1)
+      axios
+        .post("/api/add-score", { state })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
   render() {
     return (
       <>
@@ -103,7 +115,12 @@ export default class LoserPage extends React.Component {
               </div>
               <div className="field">
                 <div className="control">
-                  <button className="button is-link">Submit</button>
+                  <button
+                    className="button is-link"
+                    onClick={(e) => this.addScorer(this.state, e)}
+                  >
+                    Submit
+                  </button>
                 </div>
               </div>
             </form>
@@ -129,5 +146,3 @@ export function Head() {
     </>
   );
 }
-/*onClick={(e) => axios.post("/api/add-score", {this.state}).then();
-                  }*/
