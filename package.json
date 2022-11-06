@@ -5,7 +5,15 @@
   "description": "BEST Tetris remake for Hack-cade 2022!! AI-powered voice-control gameplay for EXTRA AWESOMENESS!!!!!!!",
   "author": "askjag07",
   "keywords": [
-    "tetris", "retro", "video-game", "gaming", "yessir", "disney", "nintendo", "artificial-intelligence", "voice-recognition"
+    "tetris",
+    "retro",
+    "video-game",
+    "gaming",
+    "yessir",
+    "disney",
+    "nintendo",
+    "artificial-intelligence",
+    "voice-recognition"
   ],
   "scripts": {
     "develop": "gatsby develop",
@@ -41,8 +49,8 @@
     "phaser": "^3.55.2",
     "preact": "^10.11.2",
     "preact-render-to-string": "^5.2.6",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "sass": "^1.56.0"
   },
   "devDependencies": {

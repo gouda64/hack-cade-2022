@@ -33,7 +33,9 @@ export default class PlayPage extends React.Component {
 
     return (
       <div className="pt-5">
-        <IonPhaser game={game} initialize={initialize} />
+        {typeof window !== "undefined" && (
+          <IonPhaser game={game} initialize={initialize} />
+        )}
       </div>
     );
   }

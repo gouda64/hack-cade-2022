@@ -40,23 +40,46 @@ export default class LoserPage extends React.Component {
     super(props);
     this.state = {
       name: "",
-      score: -1,
+      score: null,
       phone: "",
+      scorers: [],
     };
   }
-  addScorer(state, e) {
+
+  componentDidMount() {
+    getScorer();
+  }
+
+  getScorer() {
+    const { setState } = this;
+    axios
+      .get("/api/high-scorers")
+      .then((response) => {
+        setState({ scorers: JSON.from(response).scorers });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  addScorer(state, e, g) {
     e.preventDefault();
     if (state.name !== "" && state.phone !== "" && state.score !== -1)
       axios
-        .post("/api/add-score", { state })
+        .post("/api/add-score", {
+          name: state.name,
+          score: state.score,
+          phone: state.phone,
+        })
         .then(function (response) {
-          console.log(response);
+          g();
         })
         .catch(function (error) {
           console.log(error);
         });
   }
   render() {
+    const { scorers } = this.state;
     return (
       <>
         <main className="hero is-halfheight">
@@ -71,20 +94,26 @@ export default class LoserPage extends React.Component {
         </main>
         <section className="container-fluid columns is-justify-content-space-between align-items-space-between has-background-dark">
           <div className="column p-5">
-            <table className="table has-text-centered is-hoverable is-fullwidth">
-              <thead>
-                <tr>
-                  <td>Player</td>
-                  <td>Score</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+            {scorers.length > 0 && (
+              <table className="table has-text-centered is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <td>Player</td>
+                    <td>Score</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {scorers.map((scorer) => {
+                    return (
+                      <tr key={scorer.name}>
+                        <td>{scorer.name}</td>
+                        <td>{scorer.score}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
           </div>
           <div className="column p-5">
             <form>
@@ -110,6 +139,8 @@ export default class LoserPage extends React.Component {
                     type="tel"
                     placeholder="e.g. +12345671234"
                     required
+                    value={this.state.value}
+                    onChange={(e) => this.setState({ phone: e.target.value })}
                   />
                 </div>
               </div>
@@ -117,7 +148,9 @@ export default class LoserPage extends React.Component {
                 <div className="control">
                   <button
                     className="button is-link"
-                    onClick={(e) => this.addScorer(this.state, e)}
+                    onClick={(e) =>
+                      this.addScorer(this.state, e, this.getScorer)
+                    }
                   >
                     Submit
                   </button>

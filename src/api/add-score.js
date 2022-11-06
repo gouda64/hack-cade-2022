@@ -15,7 +15,7 @@ export default function handler(req, res) {
 
     let hscorers = collection.aggregate([
       { $sort: { scores: 1 } },
-      { $limit: 10 },
+      { $limit: 5 },
     ]);
 
     client.close();

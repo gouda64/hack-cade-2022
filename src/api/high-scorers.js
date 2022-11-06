@@ -11,12 +11,12 @@ export default function handler(req, res) {
   client.connect((err) => {
     const collection = client.db("tetris").collection("players");
     // perform actions on the collection object
-    let hscorers = collection.aggregate([
+    let scorers = collection.aggregate([
       { $sort: { scores: 1 } },
       { $limit: 10 },
     ]);
 
     client.close();
-    res.status(500).json({ hscorers });
+    res.status(500).json({ scorers });
   });
 }
