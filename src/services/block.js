@@ -17,7 +17,7 @@ export default class Block {
     for (let i = 0; i < 4; i++) {
       if (
         this.blockX[i] === 9 ||
-        this.grid[20 - this.blockY[i] - 1][this.blockX[i] + 1] !== -1
+        this.grid[this.blockY[i]][this.blockX[i] + 1] !== -1
       ) {
         notBlocked = false;
         break;
@@ -28,12 +28,11 @@ export default class Block {
     }
   }
   moveLeft() {
-    console.log(grid);
     let notBlocked = true;
     for (let i = 0; i < 4; i++) {
       if (
         this.blockX[i] === 0 ||
-        this.grid[20 - this.blockY[i] - 1][this.blockX[i] - 1] !== -1
+        this.grid[this.blockY[i]][this.blockX[i] - 1] !== -1
       ) {
         notBlocked = false;
         break;
@@ -50,7 +49,6 @@ export default class Block {
     let newX = [];
     let newY = [];
     let canRotate = true;
-    let fixed = false;
     for (var i = 0; i < 4; i++) {
       if (clockwise) {
         newX[i] = this.blockY[i] - this.blockY[0] + this.blockX[0];
@@ -59,14 +57,14 @@ export default class Block {
         newX[i] = -(this.blockY[i] - this.blockY[0]) + this.blockX[0];
         newY[i] = this.blockX[i] - this.blockX[0] + this.blockY[0];
       }
-      if (!fixed) {
+      if (canRotate) {
         canRotate = !(
           newX[i] < 0 ||
           newX[i] >= 10 ||
           newY[i] >= 20 ||
-          this.grid[20 - newY[i] - 1][newX[i]] !== -1
+          newY[i] < 0 ||
+          this.grid[newY[i]][newX[i]] !== -1
         );
-        fixed = !canRotate;
       }
     }
 
@@ -77,18 +75,14 @@ export default class Block {
         canRotate = true;
         for (let i = 0; i < 4; i++) {
           newX[i]++;
-          canRotate = !(
-            newX[i] < 0 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-          );
+          canRotate = !(newX[i] < 0 || this.grid[newY[i]][newX[i]] !== -1);
           if (!canRotate) break;
         }
         if (!canRotate) {
           canRotate = true;
           for (let i = 0; i < 4; i++) {
             newX[i]++;
-            canRotate = !(
-              newX[i] < 0 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-            );
+            canRotate = !(newX[i] < 0 || this.grid[newY[i]][newX[i]] !== -1);
             if (!canRotate) break;
           }
         }
@@ -98,18 +92,14 @@ export default class Block {
         canRotate = true;
         for (let i = 0; i < 4; i++) {
           newX[i]--;
-          canRotate = !(
-            newX[i] >= 10 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-          );
+          canRotate = !(newX[i] >= 10 || this.grid[newY[i]][newX[i]] !== -1);
           if (!canRotate) break;
         }
         if (!canRotate) {
           canRotate = true;
           for (let i = 0; i < 4; i++) {
             newX[i]--;
-            canRotate = !(
-              newX[i] >= 10 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-            );
+            canRotate = !(newX[i] >= 10 || this.grid[newY[i]][newX[i]] !== -1);
             if (!canRotate) break;
           }
         }
@@ -119,18 +109,14 @@ export default class Block {
         canRotate = true;
         for (let i = 0; i < 4; i++) {
           newY[i]--;
-          canRotate = !(
-            newY[i] >= 20 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-          );
+          canRotate = !(newY[i] >= 20 || this.grid[newY[i]][newX[i]] !== -1);
           if (!canRotate) break;
         }
         if (!canRotate) {
           canRotate = true;
           for (let i = 0; i < 4; i++) {
             newY[i]--;
-            canRotate = !(
-              newY[i] >= 20 || this.grid[20 - newY[i] - 1][newX[i]] !== -1
-            );
+            canRotate = !(newY[i] >= 20 || this.grid[newY[i]][newX[i]] !== -1);
             if (!canRotate) break;
           }
         }
@@ -138,8 +124,8 @@ export default class Block {
     }
 
     if (canRotate) {
-      this.blockX[i] = newX[i];
-      this.blockY[i] = newY[i];
+      this.blockX = newX;
+      this.blockY = newY;
     }
   }
 
@@ -148,7 +134,7 @@ export default class Block {
       for (let i = 0; i < 4; i++) {
         if (
           this.blockY[i] === 19 ||
-          this.grid[20 - this.blockY[i] - 1][this.blockX[i]] !== -1
+          this.grid[this.blockY[i] + 1][this.blockX[i]] !== -1
         ) {
           break unicorn;
         }
@@ -157,16 +143,19 @@ export default class Block {
         this.blockY[i]++;
       }
     }
+    for (let i = 0; i < 4; i++) {
+      this.grid[this.blockY[i]][this.blockX[i]] = this.id;
+    }
   }
 
   landed() {
     for (let i = 0; i < 4; i++) {
       if (
         this.blockY[i] >= 19 ||
-        this.grid[20 - this.blockY[i] - 1][this.blockX[i]] !== -1
+        this.grid[this.blockY[i] + 1][this.blockX[i]] !== -1
       ) {
         for (let z = 0; z < 4; z++) {
-          this.grid[20 - this.blockY[z] - 1][this.blockX[z]] = this.id;
+          this.grid[this.blockY[z]][this.blockX[z]] = this.id;
         }
         return true;
       }
@@ -175,11 +164,12 @@ export default class Block {
   }
 
   checkLose() {
-    return this.grid[19][4] === -1 && this.grid[19][5] === -1;
+    return this.grid[0][4] !== -1 && this.grid[0][5] !== -1;
   }
 
   newBlock(id) {
-    switch (this.id) {
+    this.id = id;
+    switch (id) {
       case 0:
         this.blockX = [4, 3, 5, 6];
         this.blockY = [0, 0, 0, 0];
@@ -211,9 +201,5 @@ export default class Block {
       default:
         break;
     }
-  }
-
-  getId() {
-    return this.id;
   }
 }

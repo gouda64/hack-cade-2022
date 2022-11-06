@@ -27,13 +27,10 @@ export default class PlayPage extends React.Component {
 
   render() {
     const { initialize, game } = this.state;
+
     return (
-      <div className="columns">
-        <IonPhaser
-          className="column has-text-center"
-          game={game}
-          initialize={initialize}
-        />
+      <div className="pt-5">
+        <IonPhaser game={game} initialize={initialize} />
       </div>
     );
   }
