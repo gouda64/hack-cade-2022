@@ -59,7 +59,7 @@ module.exports = {
         background_color: "#000000", // Above search bar (in phone browser)
         theme_color: "#000000", // Search bar (in phone browser)
         display: "standalone",
-        icon: "./src/images/i.png", // Path to your icon
+        icon: "./src/images/icon.png", // Path to your icon
         cache_busting_mode: "none",
         icon_options: {
           purpose: "any maskable",
