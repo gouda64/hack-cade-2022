@@ -46,7 +46,7 @@ export default class LoserPage extends React.Component {
   }
 
   componentDidMount() {
-    getScorer();
+    this.getScorer();
   }
 
   getScorer() {
